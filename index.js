@@ -54,23 +54,18 @@ server.get("/api/zoos/:id", (req, res) => {
 });
 
 //PUT
-server.put("/api/zoos/:id", (req, res) => {
-  const name = req.body.name;
-  const id = req.params.id;
-  db("zoos")
+server.put('/api/zoos/:id', (req, res) => {
+  const changes = req.body;
+  const { id } = req.params;
+
+  db('zoos')
     .where({ id })
-    .update(name)
+    .update(changes)
     .then(count => {
-      if (count > 0) {
-        name => {
-          res.status(200).json(name);
-        };
-      } else {
-        res.status(404).json({ message: "Record not found" });
-      }
+      res.status(200).json(count);
     })
-    .catch(error => {
-      res.status(500).json(error);
+    .catch(err => {
+      res.status(500).json(err);
     });
 });
 
